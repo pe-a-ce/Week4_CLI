@@ -58,8 +58,9 @@ public class Main {
                     break;
                 case 0:
                     System.out.println("Good bye!");
+                    break;
                 default:
-                    System.out.println("Pick a number between 0 and 5");
+                    System.out.println("Try again. Pick a number between 0 and 5");
             }
         } while (option != 0);
     }
@@ -110,28 +111,36 @@ public class Main {
         //exception if they don't provide a string for a name/email/last name Michelle
         System.out.println("Please provide a first name: ");
         String firstName = null;
-        try {
-            firstName = in.next().toLowerCase();
-        } catch (InputMismatchException e) {
-            System.out.println("Please provide a valid name: ");
-        }
-        System.out.println("Please provide a last name: ");
         String lastName = null;
-        try {
-            lastName = in.next().toLowerCase();
-        } catch (InputMismatchException e) {
-            System.out.println("Please provide a valid name: ");
-        }
         String email = null;
-        System.out.println("Please provide an email address: ");
-        try {
-            email = in.next();
-        } catch (InputMismatchException e) {
-            System.out.println("Please provide a valid email address: ");
-        }
-        System.out.println("Finally, please provide your passport number: ");
+        int passportID = 0;
+        boolean loop = true;
+        while (loop) {
+            try {
+                firstName = in.next().toLowerCase();
+            } catch (InputMismatchException e) {
+                System.out.println("Please provide a valid name: ");
+                continue;
+            }
+            System.out.println("Please provide a last name: ");
+
+            try {
+                lastName = in.next().toLowerCase();
+            } catch (InputMismatchException e) {
+                System.out.println("Please provide a valid name: ");
+            }
+
+            System.out.println("Please provide an email address: ");
+            try {
+                email = in.next();
+                loop = false;
+            } catch (InputMismatchException e) {
+                System.out.println("Please provide a valid email address: ");
+            }
+            System.out.println("Finally, please provide your passport number: ");
 //        exception if they provide a string instead of int Michelle
-        int passportID = in.nextInt();
+            passportID = in.nextInt();
+        }
         Passenger newPassenger = new Passenger(firstName, lastName, email, passportID);
         emptyPassengers.add(newPassenger);
         System.out.println("Passenger " + firstName + " " + lastName + " has been added.");
@@ -144,15 +153,21 @@ public class Main {
         //exception if not a number
         int passengerId = in.nextInt();
         //Find correct passenger
-        Passenger passengerToAdd = emptyPassengers.stream().filter(p -> p.getPassportID() == passengerId).findFirst().orElse(passengerNotFound(in));
+        Passenger passengerToAdd;
+        try {
+            passengerToAdd = emptyPassengers.stream().filter(p -> p.getPassportID() == passengerId).toList().get(0);
+        }
+        catch(Exception e){
+            passengerToAdd = passengerNotFound(in);
+        }
+
         System.out.println("You have chosen passenger: " + passengerToAdd.getFirstName() + " " + passengerToAdd.getLastName());
         //Provide flight ID
-
         //Find correct flight
 //        exception if the flight is not found
         Flight flightToAdd = null;
         String msg;
-        boolean loop = false;
+        boolean loop = true;
         while(loop) {
             System.out.println("Please provide the flight ID to book on to: ");
             int flightId = in.nextInt();
@@ -181,7 +196,8 @@ public class Main {
                 System.out.println("Please select the flight you wish to cancel");
                 int flightNumber = in.nextInt();
 //                exception if they pick a flight not created
-                System.out.println("You have selected " + flightNumber + ". If this is correct, enter 1. If not, enter 2");
+                Destination flightDest = ukAirport.getAllFlights().stream().filter(f -> f.getFlightId() == flightNumber).map(f -> f.getDestination()).toList().get(0);
+                System.out.println("You have selected " + flightNumber + " going to " + flightDest + ". If this is correct, enter 1. If not, enter 2");
                     num = in.nextInt();
                 if (num == 1) {
 //              find flight number

@@ -27,7 +27,6 @@ class AirportTest {
 
     }
 
-
     @Test
     void addFlight__Test() {
 //        Given
@@ -61,4 +60,22 @@ class AirportTest {
 
         assertEquals(expectedOutput, outContent.toString());
     }
+
+//    test to remove existing flight
+    @Test
+    void removeExistingFlight_test(){
+        //given airport and flight
+        Airport testAirport = new Airport();
+        Flight flight1 = new Flight(Destination.LONDON, 1234);
+
+//    When
+        testAirport.removeFlight(flight1);
+
+//    Then
+        assertFalse(testAirport.getAllFlights().contains(flight1));
+    }
+
+
+
+
 }

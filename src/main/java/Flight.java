@@ -11,7 +11,6 @@ public class Flight {
     private int flightId;
     private List<Passenger> passengers;
 
-
     //Getters & Setters
 
     public Destination getDestination() {
@@ -38,7 +37,6 @@ public class Flight {
         this.passengers = passengers;
     }
 
-
     //Constructors
 
     public Flight(Destination destination, int flightId) {
@@ -46,7 +44,6 @@ public class Flight {
         this.flightId = flightId;
         this.passengers = new ArrayList<>();
     }
-
 
     //Methods
 
